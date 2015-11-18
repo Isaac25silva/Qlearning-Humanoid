@@ -5,7 +5,7 @@
 * @author Isaac Jesus da Silva - ROBOFEI-HT - FEI
 * @version V0.0.7
 * @created 22/09/2014
-* @Modified 23/09/2014
+* @Modified 17/11/2014
 * @e-mail isaac25silva@yahoo.com.br
 * @brief control
 ****************************************************************************
@@ -100,8 +100,8 @@ int main(int argc, char* argv[])
    
 
 // ---- Open USBDynamixel -----------------------------------------------{
-bool servoComunica = false;
-bool servoConectado = false;
+    bool servoComunica = false;
+    bool servoConectado = false;
 	while(*deviceIndex<3)// laço que percorre o servo 0, 1 e 2.
 	{
 		if( dxl_initialize(*deviceIndex, *baudnum) == 0 )
@@ -147,17 +147,15 @@ bool servoConectado = false;
 //-----------------------------------------------------------------------------}
 
 
-for(int x=3; x<=8; x++)
-    dxl_write_word( x, 34, 200); // Inicia os braços com baixo torque
+    for(int x=3; x<=8; x++)
+        dxl_write_word( x, 34, 200); // Inicia os braços com baixo torque
 
-//dxl_write_word(10, MOVING_SPEED, 30);
-//dxl_write_word(16, MOVING_SPEED, 30);
-robo_ereto();
-     espera_mov();
+    //dxl_write_word(10, MOVING_SPEED, 30);
+    //dxl_write_word(16, MOVING_SPEED, 30);
+    robo_ereto();
+    espera_mov();
 
-
-
-while(1){}
+    //while(1){}
 
 	//printf( "Press Enter key to continue!(press ESC and Enter to quit)\n" );
 	//	if(getchar() == 0x1b)
@@ -170,11 +168,11 @@ while(1) //inicia o loop do programa main-------------------------------------
 	//std::cout<<IMU_ACCEL_Y<<std::endl;
 	//std::cout<<IMU_ACCEL_Z<<std::endl;
 
-unsigned int ServoBalanco1 = 11; //seleciona o servo da coxa para o treinamento
-unsigned int ServoBalanco2 = 12; //seleciona o servo da coxa para o treinamento
+    unsigned int ServoBalanco1 = 11; //seleciona o servo da coxa para o treinamento
+    unsigned int ServoBalanco2 = 12; //seleciona o servo da coxa para o treinamento
 
-//unsigned int ServoBalanco1 = 14; //seleciona o servo do calcanhar para o treinamento
-//unsigned int ServoBalanco2 = 20; //seleciona o servo do calcanhar para o treinamento
+    //unsigned int ServoBalanco1 = 14; //seleciona o servo do calcanhar para o treinamento
+    //unsigned int ServoBalanco2 = 20; //seleciona o servo do calcanhar para o treinamento
 
 	dxl_write_word(ServoBalanco1, MOVING_SPEED, 30);
 	dxl_write_word(ServoBalanco2, MOVING_SPEED, 30);
@@ -183,19 +181,19 @@ unsigned int ServoBalanco2 = 12; //seleciona o servo da coxa para o treinamento
 	//dxl_write_word(16, P_GOAL_POSITION_L, dxl_read_word( 16, P_PRESENT_POSITION_L) - 80);
      //espera_mov();
 
-sleep(2);//aguarda 2 segundos a estabilização do robô
+    sleep(2);//aguarda 2 segundos a estabilização do robô
 
-int estado, acao, estadoNovo, posiinit, cont=0, estadoServo;
-bool atGoal = 0;
-double reforco;
-double best_new_qval, qval;
-double  imu_med=0, imu_medy=0;
-unsigned int passoObjetivo=0;
-unsigned int Episodio=0;
-int escolhe;
+    int estado, acao, estadoNovo, posiinit, cont=0, estadoServo;
+    bool atGoal = 0;
+    double reforco;
+    double best_new_qval, qval;
+    double  imu_med=0, imu_medy=0;
+    unsigned int passoObjetivo=0;
+    unsigned int Episodio=0;
+    int escolhe;
 
-  /* initialize random seed: */
-  srand (time(NULL));
+     /* initialize random seed: */
+     srand (time(NULL));
 
 //--------------------Inicie o programa abrindo o arquivo ou aleatorio---------------------------------
 passos = openFiletoGetQvalueVector(Episodio);//abre o arquivo salvo e passa os valores para Qvalue
@@ -251,21 +249,21 @@ do
      //estadoServo = (rand() % 161); // Randomicamente cai em um estado aleatorio
     estadoServo = 0;
 
-     gettimeofday(&inicio, NULL); //comeco novotempo
+    gettimeofday(&inicio, NULL); //comeco novotempo
 
-     //escolhe = (rand() % 2);
+    //escolhe = (rand() % 2);
     // printf("escolhe = %d",escolhe);
-     //if(escolhe)
+    //if(escolhe)
 	//estadoServo = 170;
-     //else
+    //else
 	//estadoServo = 0;
-     //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
 
-     dxl_write_word(ServoBalanco1, P_GOAL_POSITION_L, posEstadoServo10[estadoServo]); //Manda o servo para estado
-     dxl_write_word(ServoBalanco2, P_GOAL_POSITION_L, posEstadoServo16[estadoServo]); //Manda o servo para estado
-     dxl_write_word(ServoBalanco1, P_GOAL_POSITION_L, posEstadoServo10[estadoServo]); //Manda o servo para estado
-     dxl_write_word(ServoBalanco2, P_GOAL_POSITION_L, posEstadoServo16[estadoServo]); //Manda o servo para estado
-     espera_mov();
+    dxl_write_word(ServoBalanco1, P_GOAL_POSITION_L, posEstadoServo10[estadoServo]); //Manda o servo para estado
+    dxl_write_word(ServoBalanco2, P_GOAL_POSITION_L, posEstadoServo16[estadoServo]); //Manda o servo para estado
+    dxl_write_word(ServoBalanco1, P_GOAL_POSITION_L, posEstadoServo10[estadoServo]); //Manda o servo para estado
+    dxl_write_word(ServoBalanco2, P_GOAL_POSITION_L, posEstadoServo16[estadoServo]); //Manda o servo para estado
+    espera_mov();
 
 	//-----Calcula a média para filtrar ruído da IMU---------------------------------
 	float imu_soma = 0;
@@ -319,31 +317,31 @@ do
 	//-------------------------------------------------------------------------------
 		
 
-     std::cout<<"\e[0;34m";
-     printf("Estado Escolhido %d | Estado do Servo = %d\n", estado, estadoServo);
-     std::cout<<"\e[0m";
-     atGoal = 0;
+    std::cout<<"\e[0;34m";
+    printf("Estado Escolhido %d | Estado do Servo = %d\n", estado, estadoServo);
+    std::cout<<"\e[0m";
+    atGoal = 0;
 
-     //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
 
-//while(1){}
-     estadoNovo = estado;
+    //while(1){}
+    estadoNovo = estado;
 
 	dxl_write_word(ServoBalanco1, MOVING_SPEED, 600);
 	dxl_write_word(ServoBalanco2, MOVING_SPEED, 600);
-     do
-     {
+    do
+    {
         servo_funcionando();
-	//std::cout<<"estado = "<<estado<<std::endl;
-	//std::cout<<"Stand = "<<StandupPos[9]<<std::endl;
-	//std::cout<<"dxl = "<<dxl_read_word( 10, P_PRESENT_POSITION_L)<<std::endl;
+	    //std::cout<<"estado = "<<estado<<std::endl;
+	    //std::cout<<"Stand = "<<StandupPos[9]<<std::endl;
+	    //std::cout<<"dxl = "<<dxl_read_word( 10, P_PRESENT_POSITION_L)<<std::endl;
      	//acao = best_qvalue_action(estado);
-	acao = choose_best_action(estado);
-	//printf("acao = %d\n",acao);
-	//std::cout<<"estado = "<<estado<<std::endl;
-	//if(estado < 0)
+	    acao = choose_best_action(estado);
+	    //printf("acao = %d\n",acao);
+	    //std::cout<<"estado = "<<estado<<std::endl;
+	    //if(estado < 0)
 		//estado = 1;
-	//if(estado > 170)
+	    //if(estado > 170)
 		//estado =169;
 	if(acao==0)
 	    printf("estado escolhido = %d | *Qacao0 = %2.4f | Qacao1 = %2.4f | IMU = %1.3f\n", estadoNovo, qvalues[estado][0], 			qvalues[estado][1], imu_med);
@@ -508,7 +506,7 @@ void saveQ(double qvalues[61][2], unsigned int passos, unsigned int Episodio)
     std::string separator = " "; // Use blank as default separator between single features
     std::fstream File;
 
-    File.open("Qvalue.dat", std::ios::out);
+    File.open("./dados/Qvalue.dat", std::ios::out);
     if (File.good() && File.is_open())
     {
         for (int i = 0; i < 61; ++i)
@@ -523,7 +521,7 @@ void saveQ(double qvalues[61][2], unsigned int passos, unsigned int Episodio)
         File.close();
     }
     else
-	printf("Erro ao Salvar o arquivo\n");
+	printf("Erro ao Salvar o arquivo\nNo terminal execute o programa control estando na pasta RoboFEI-HT.Qlearning");
 }
 //==============================================================================================
 //--------------------Salva o numero de passos por Episodio-------------------------------------
@@ -531,7 +529,7 @@ void saveEpisodios(unsigned int Episodio, unsigned int passos)
 {
     std::fstream File;
 
-    File.open("Episodio.dat", std::ios::app | std::ios::out);
+    File.open("./dados/Episodio.dat", std::ios::app | std::ios::out);
     if (File.good() && File.is_open())
     {
         File << Episodio <<" "<< passos;
@@ -540,7 +538,7 @@ void saveEpisodios(unsigned int Episodio, unsigned int passos)
         File.close();
     }
     else
-	printf("Erro ao Salvar o arquivo\n");
+	printf("Erro ao Salvar o arquivo\nNo terminal execute o programa control estando na pasta RoboFEI-HT.Qlearning");
 }
 //==============================================================================================
 //--------------------Salva o tempo (milisegundos) por Episodio-------------------------------------
@@ -550,7 +548,7 @@ void saveTime(unsigned int Episodio, unsigned int tempo)
 {
     std::fstream File;
 
-    File.open("Tempo.dat", std::ios::app | std::ios::out);
+    File.open("./dados/Tempo.dat", std::ios::app | std::ios::out);
     if (File.good() && File.is_open())
     {
         File << Episodio <<" "<< tempo;
@@ -559,7 +557,7 @@ void saveTime(unsigned int Episodio, unsigned int tempo)
         File.close();
     }
     else
-	printf("Erro ao Salvar o arquivo\n");
+	printf("Erro ao Salvar o arquivo\nNo terminal execute o programa control estando na pasta RoboFEI-HT.Qlearning");
 }
 
 
@@ -571,7 +569,7 @@ unsigned int openFiletoGetQvalueVector(unsigned int &Episodio)
 {
     int passos=0;
     const char *fileName1;
-    std::string fileName = "Qvalue.dat";
+    std::string fileName = "./dados/Qvalue.dat";
     fileName1 = fileName.c_str();
 
 	std::ifstream File(fileName1);
