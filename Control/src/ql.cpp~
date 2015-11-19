@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <time.h>
 
-std::mt19937 rl_rand(time(0));
-std::uniform_real_distribution<double> randValue(0.00, 1.00);
-std::uniform_int_distribution<> disac(0, 1);
 
 void init_qvalues()
 {

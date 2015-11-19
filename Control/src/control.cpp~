@@ -50,7 +50,7 @@ Os estados estão discretizados pelas posições do Acelerômetro.
 
 using namespace std;
 
-void saveQ(double qvalues[61][2], unsigned int passos, unsigned int Episodio);
+void saveQ(double qvalues[121][2], unsigned int passos, unsigned int Episodio);
 
 void saveEpisodios(unsigned int Episodio, unsigned int passos);
 
@@ -71,9 +71,13 @@ unsigned int StandupPos[22] =  {842,212+170,457,622,022,987,517,522,507,582,512,
 //		   -0.90, -0.91, -0.92, -0.93, -0.94, -0.95, -0.96, -0.97, -0.98, -0.99,
 //		   -1.00, -1.01, -1.02, -1.03, -1.04, -1.05, -1.06, -1.07, -1.08, -1.09, -1.10};
 
-float posAccel[31] = {-0.870, -0.875, -0.880, -0.885, -0.890, -0.895, -0.900, -0.905, -0.910, -0.915,
-		   -0.920, -0.925, -0.930, -0.935, -0.940, -0.945, -0.950, -0.955, -0.960, -0.965,
-		   -0.970, -0.975, -0.980, -0.985, -0.990, -0.995, -1.000, -1.005, -1.010, -1.0150, -1.020};
+float posAccel[61] = {
+           -0.8700, -0.8725, -0.8750, -0.8775, -0.8800, -0.8825, -0.8850, -0.8875, -0.8900, -0.8925,
+           -0.8950, -0.8975, -0.9000, -0.9025, -0.9050, -0.9075, -0.9100, -0.9125, -0.9150, -0.9175,
+		   -0.9200, -0.9225, -0.9250, -0.9275, -0.9300, -0.9325, -0.9350, -0.9375, -0.9400, -0.9425,
+		   -0.9450, -0.9475, -0.9500, -0.9525, -0.9550, -0.9575, -0.9600, -0.9625, -0.9650, -0.9675,
+		   -0.9700, -0.9725, -0.9750, -0.9775, -0.9800, -0.9825, -0.9850, -0.9875, -0.9900, -0.9925,
+		   -0.9950, -0.9975, -1.0000, -1.0025, -1.0050, -1.0075, -1.0100, -1.0125, -1.0150, -1.0175, -1.0200};
 
 
 using namespace std;
@@ -220,10 +224,10 @@ for(int x=0;x<161;x++)
 }
 //--------------------------------------------------------------------
 
-for(int x=0;x<61;x++)
+for(int x=0;x<121;x++)
 {
 	//Valores das heurísticas----------------------
-	if(x<30)
+	if(x<60)
 	{
 	    heuristic[x][0]=0;
 	    heuristic[x][1]=0;
@@ -286,17 +290,17 @@ do
 	     if(imu_medy>=0) //verifica se o robô está pendendo para frente ou para traz
 	         estado = 0;
 	     else
-	         estado = 60;
+	         estado = 120;
 	}
 	else
 	{
-	     if(imu_med<posAccel[30])
-		estado = 30;
+	     if(imu_med<posAccel[60])
+		      estado = 60;
 	     else
 	     {
 	         if(imu_medy>=0)//verifica se o robô está pendendo para frente ou para traz
 		 {
-		    for(int x=1; x<30;x++)
+		    for(int x=1; x<60;x++)
 		    {
 		      if(imu_med<posAccel[x] && imu_med>=posAccel[x+1])
 			   estado = x;
@@ -305,10 +309,10 @@ do
 		 }
 		 else
 		 {
-		    for(int x=1; x<30;x++)
+		    for(int x=1; x<60;x++)
 		    {
 		      if(imu_med<posAccel[x] && imu_med>=posAccel[x+1])
-			   estado = 60-x;
+			   estado = 120-x;
 		      //printf("Estado[%d]= %f | Estado[%d]=%f\n", 60-x, posAccel[x],60-x+1, posAccel[x+1] );
 		    }
 		 }
@@ -402,17 +406,17 @@ do
 	     if(imu_medy>=0)
 	         estadoNovo = 0;
 	     else
-	         estadoNovo = 60;
+	         estadoNovo = 120;
 	}
 	else
 	{
-	     if(imu_med<posAccel[30])
-		estadoNovo = 30;
+	     if(imu_med<posAccel[60])
+		estadoNovo = 60;
 	     else
 	     {
 	         if(imu_medy>=0)
 		 {
-		    for(int x=1; x<30;x++)
+		    for(int x=1; x<60;x++)
 		    {
 		      if(imu_med<posAccel[x] && imu_med>=posAccel[x+1])
 			   estadoNovo = x;
@@ -421,10 +425,10 @@ do
 		 }
 		 else
 		 {
-		    for(int x=1; x<30;x++)
+		    for(int x=1; x<60;x++)
 		    {
 		      if(imu_med<posAccel[x] && imu_med>=posAccel[x+1])
-			   estadoNovo = 60-x;
+			   estadoNovo = 120-x;
 		      //printf("Estado[%d]= %f | Estado[%d]=%f\n", 60-x, posAccel[x],60-x+1, posAccel[x+1] );
 		    }
 		 }
@@ -433,7 +437,7 @@ do
 	//-------------------------------------------------------------------------------
 
 	//---Recebe reforco-----------------------------------------------------------------
-	if( imu_med < -1.025)
+	if( imu_med < -1.008)
 	{
 
 		//-----Calcula a média novamente para verificar se é um falso positivo
@@ -448,7 +452,7 @@ do
 
 
 		//---Entra para recebe reforco positivo----------------------
-		if( imu_med < -1.020 )
+		if( imu_med < -1.007)
 		{
             gettimeofday(&final, NULL); //tempo final
             tmili = (int) (1000 * (final.tv_sec - inicio.tv_sec) + (final.tv_usec - inicio.tv_usec) / 1000);
@@ -501,7 +505,7 @@ do
 
 //==============================================================================================
 //--------------------Salva a tabel Q no arquivo------------------------------------------------
-void saveQ(double qvalues[61][2], unsigned int passos, unsigned int Episodio)
+void saveQ(double qvalues[121][2], unsigned int passos, unsigned int Episodio)
 {
     std::string separator = " "; // Use blank as default separator between single features
     std::fstream File;
@@ -509,7 +513,7 @@ void saveQ(double qvalues[61][2], unsigned int passos, unsigned int Episodio)
     File.open("./dados/Qvalue.dat", std::ios::out);
     if (File.good() && File.is_open())
     {
-        for (int i = 0; i < 61; ++i)
+        for (int i = 0; i < 121; ++i)
         {
             for (int j = 0; j < 2; ++j)
                     File << qvalues[i][j] << separator;
@@ -576,14 +580,14 @@ unsigned int openFiletoGetQvalueVector(unsigned int &Episodio)
 	std::istream_iterator<float> start(File), end;
 	std::vector<float> vectorTemp(start, end);
 	int x=0;
-        for (int i = 0; i < 122; i+=2)
+        for (int i = 0; i < 242; i+=2)
         {
                 qvalues[x][0] = vectorTemp[i];
                 qvalues[x][1] = vectorTemp[i+1];
 		x++;
         }
-	Episodio = vectorTemp[122];
-	passos = vectorTemp[123];
+	Episodio = vectorTemp[242];
+	passos = vectorTemp[243];
 
 	return passos;
 }

@@ -17,7 +17,12 @@
 
 #define GAMMA 0.99 /* fator de desconto = 90% */
 #define ALPHA 0.2 /* taxa de aprendizado = 10% */
-#define EXPLORATION_THRESHOLD 0.1 /* porcentagem de exploração = 05% */
+#define EXPLORATION_THRESHOLD 0.2 /* porcentagem de exploração = 05% */
+
+std::mt19937 rl_rand(time(0));
+std::uniform_real_distribution<double> randValue(0.00, 1.00);
+std::uniform_int_distribution<> disac(0, 1);
+
 
 double qvalues[61][2];
 

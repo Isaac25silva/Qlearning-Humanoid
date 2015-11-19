@@ -8,7 +8,7 @@ void init_qvalues()
 {
   int r,c,a;
 
-  for (r=0;r<= 60;r++)
+  for (r=0;r<= 120;r++)
 	for (a=0;a<=1;a++)
 	  {
 	    qvalues[r][a] = randValue(rl_rand);
