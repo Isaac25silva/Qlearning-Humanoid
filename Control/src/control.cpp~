@@ -56,6 +56,8 @@ void saveEpisodios(unsigned int Episodio, unsigned int passos);
 
 unsigned int openFiletoGetQvalueVector(unsigned int &Episodio);
 
+void filtro_imu(double 	&imu_med, double &imu_medy);
+
 void servo_funcionando();
 void saveTime(unsigned int Episodio, unsigned int tempo);
 //////global variables////////////////////////////////////////////////
@@ -268,18 +270,10 @@ do
     dxl_write_word(ServoBalanco1, P_GOAL_POSITION_L, posEstadoServo10[estadoServo]); //Manda o servo para estado
     dxl_write_word(ServoBalanco2, P_GOAL_POSITION_L, posEstadoServo16[estadoServo]); //Manda o servo para estado
     espera_mov();
+    sleep(1);
 
 	//-----Calcula a média para filtrar ruído da IMU---------------------------------
-	float imu_soma = 0;
-	float imu_somay = 0;
-	for(int x=0; x<25;x++)
-	{
-		imu_soma += IMU_ACCEL_Z;
-		imu_somay += IMU_ACCEL_X;
-		usleep(4000);
-	}
-	imu_med  = imu_soma / 25;
-	imu_medy  = imu_somay / 25;
+    filtro_imu(imu_med, imu_medy);
 	//-------------------------------------------------------------------------------
 
 	std::cout<<"IMUZ = "<<imu_med<<"| IMUY = "<<imu_medy<<std::endl;
@@ -358,12 +352,12 @@ do
 	if(acao == 0)
 	{
 		if(estadoServo<160)
-			estadoServo+=2;
+			estadoServo+=3;
 	}
 	else
 	{
 		if(estadoServo>0)
-			estadoServo-=2;
+			estadoServo-=3;
 	}
 	
 
@@ -388,16 +382,7 @@ do
 		//estadoNovo =160;
 
 	//-----Calcula a média para filtrar ruído da IMU---------------------------------
-	imu_soma = 0;
-	imu_somay = 0;
-	for(int x=0; x<25;x++)
-	{
-		imu_soma += IMU_ACCEL_Z;
-		imu_somay += IMU_ACCEL_X;
-		usleep(4000);
-	}
-	imu_med  = imu_soma / 25;
-	imu_medy  = imu_somay / 25;
+    filtro_imu(imu_med, imu_medy);
 	//-------------------------------------------------------------------------------
 
 	//--- Verifica em que estado o agente se encontra neste momento-------------------
@@ -611,4 +596,24 @@ void servo_funcionando() //verifica se esta funcionando
 		exit(0);
 	}
 }
+//=================================================================================================================
+
+
+void filtro_imu(double 	&imu_med, double &imu_medy)
+{
+	//-----Calcula a média para filtrar ruído da IMU---------------------------------
+	float imu_soma = 0;
+	float imu_somay = 0;
+	for(int x=0; x<25;x++)
+	{
+		imu_soma += IMU_ACCEL_Z;
+		imu_somay += IMU_ACCEL_X;
+		usleep(4000);
+	}
+	imu_med  = imu_soma / 25;
+	imu_medy  = imu_somay / 25;
+	//-------------------------------------------------------------------------------
+}	
+	
+
 
