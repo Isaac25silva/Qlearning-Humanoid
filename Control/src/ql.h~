@@ -14,6 +14,8 @@
 #define MSEED 161803398
 #define MZ 0
 #define FAC (1.0/ MBIG)
+#define TOTALESTADOS 121
+#define FINALESTADO 120
 
 #define GAMMA 0.99 /* fator de desconto = 90% */
 #define ALPHA 0.2 /* taxa de aprendizado = 10% */
@@ -24,9 +26,9 @@ std::uniform_real_distribution<double> randValue(0.00, 1.00);
 std::uniform_int_distribution<> disac(0, 1);
 
 
-double qvalues[61][2];
+double qvalues[121][2];
 
-double heuristic[61][2];
+double heuristic[121][2];
 
 void init_qvalues();
 
